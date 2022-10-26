@@ -4,24 +4,7 @@ from data_utils import Corpus
 from utils import save_embeddings
 from skipgram import skipgram
 
-
 def train_skipgram (corpus_dir, extn, learning_rate, embedding_size, num_negsample, epochs, batch_size, output_dir,valid_size):
-    '''
-
-    :param corpus_dir: folder containing WL kernel relabeled files. All the files in this folder will be relabled
-    according to WL relabeling strategy and the format of each line in these folders shall be: <target> <context 1> <context 2>....
-    :param extn: Extension of the WL relabled file
-    :param learning_rate: learning rate for the skipgram model (will involve a linear decay)
-    :param embedding_size: number of dimensions to be used for learning subgraph representations
-    :param num_negsample: number of negative samples to be used by the skipgram model
-    :param epochs: number of iterations the dataset is traversed by the skipgram model
-    :param batch_size: size of each batch for the skipgram model
-    :param output_dir: the folder where embedding file will be stored
-    :param valid_size: number of subgraphs to be chosen at random to validate the goodness of subgraph representation
-    learning process in every epoc
-    :return: name of the file that contains the subgraph embeddings (in word2vec format proposed by Mikolov et al (2013))
-    '''
-
     op_fname = '_'.join([os.path.basename(corpus_dir), 'dims', str(embedding_size), 'epochs', str(epochs),'embeddings.txt'])
     op_fname = os.path.join(output_dir, op_fname)
     if os.path.isfile(op_fname):
@@ -57,8 +40,3 @@ def train_skipgram (corpus_dir, extn, learning_rate, embedding_size, num_negsamp
     save_embeddings(corpus, final_embeddings, embedding_size, op_fname)
     logging.info('Completed writing the final embeddings, pls check file: {} for the same'.format(op_fname))
     return op_fname
-
-
-
-if __name__ == '__main__':
-    pass

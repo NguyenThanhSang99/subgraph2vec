@@ -9,13 +9,6 @@ logger = logging.getLogger()
 logger.setLevel("INFO")
 
 def read_from_json_gexf(fname=None,label_field_name='APIs',conv_undir = False):
-    '''
-    Load the graph files (.gexf or .json only supported)
-    :param fname: graph file name
-    :param label_field_name: filed denoting the node label
-    :param conv_undir: convert to undirected graph or not
-    :return: graph in networkx format
-    '''
     if not fname:
         logging.error('no valid path or file name')
         return None
@@ -42,14 +35,8 @@ def read_from_json_gexf(fname=None,label_field_name='APIs',conv_undir = False):
 
 
 def get_graph_as_bow (g, h):
-    '''
-    Get subgraph2vec sentences from the goven graph
-    :param g: networkx graph
-    :param h: WL kernel height
-    :return: sentence of the format <target> <context1> <context2> ...
-    '''
     for n,d in g.nodes_iter(data=True):
-        for i in xrange(0, h+1):
+        for i in range(0, h+1):
             center = d['relabel'][i]
             neis_labels_prev_deg = []
             neis_labels_next_deg = []
@@ -78,16 +65,10 @@ def get_graph_as_bow (g, h):
 
 
 def wlk_relabel(g,h):
-    '''
-    Perform node relabeling (coloring) according 1-d WL relabeling process (refer Shervashidze et al (2009) paper)
-    :param g: networkx graph
-    :param h: height of WL kernel
-    :return: relabeled graph
-    '''
     for n in g.nodes_iter():
         g.node[n]['relabel'] = {}
 
-    for i in xrange(0,h+1): #xrange returns [min,max)
+    for i in range(0,h+1): #xrange returns [min,max)
         for n in g.nodes_iter():
             # degree_prefix = 'D' + str(i)
             degree_prefix = ''
@@ -105,14 +86,6 @@ def wlk_relabel(g,h):
 
 
 def dump_subgraph2vec_sentences (f, h, label_filed_name):
-    '''
-    Get WL features and make the subgraph2vec sentence of the format "<target> <context1> <context2> ..." and dump the
-    same into a text file.
-    :param f: gexf or json graph file name
-    :param h: height of WL kernel
-    :param label_filed_name: the node attribute that denotes node label
-    :return: None
-    '''
     if f.endswith('json'):
         opfname = f.replace('.json','.WL'+str(h))
     else:
@@ -144,18 +117,11 @@ def dump_subgraph2vec_sentences (f, h, label_filed_name):
 
 
 if __name__ == '__main__':
-    # if sys.argv[1] in ['-h','--help']:
-    #     print 'command line args: <gexf/json graph_dir> <height of WL kernel> <num of cpu cores for multi-processing>'
-    #     exit (0)
-
     graph_dir = "/home/annamalai/OLMD/OLMD/MKLDroid/tmp/amd_dataset_graphs_wlfiles/adgs"#folder containing the graph's gexf/json format files
     h = 2 #height of WL kernel (i.e., degree of neighbourhood to consdider)
     n_cpus = 36  # number of cpus to be used for multiprocessing
     extn = '.gexf'
 
     files_to_process = get_files(dirname = graph_dir, extn = extn)
-    print files_to_process
-    raw_input('have to procees a total of {} files with {} parallel processes... hit any key to proceed...'.
-              format(len(files_to_process), n_cpus))
 
     Parallel(n_jobs=n_cpus)(delayed(dump_subgraph2vec_sentences)(f, h) for f in files_to_process)

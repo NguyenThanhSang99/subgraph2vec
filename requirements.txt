@@ -1,4 +1,7 @@
-gensim==0.12.4
-networkx==1.11
-joblib==0.10.3
+gensim
 scikit-learn
+scipy
+numpy
+joblib
+networkx
+tensorflow

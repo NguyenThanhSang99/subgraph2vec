@@ -4,7 +4,7 @@ from joblib import Parallel,delayed
 from utils import get_files
 from train_utils import train_skipgram
 from classify import perform_classification
-from make_subgraph2vec_corpus import dump_subgraph2vec_sentences
+from prepare_corpus import dump_subgraph2vec_sentences
 
 
 logger = logging.getLogger()
@@ -12,13 +12,6 @@ logger.setLevel("INFO")
 
 
 def main(args):
-    '''
-    :param args: arguments for
-    1. training the skigram model for learning subgraph representations
-    2. construct the deep WL kernel using the learnt subgraph representations
-    3. performing graph classification using  the WL and deep WL kernel
-    :return: None
-    '''
     corpus_dir = args.corpus
     output_dir = args.output_dir
     batch_size = args.batch_size
@@ -56,20 +49,16 @@ def main(args):
 
 
 def parse_args():
-    '''
-    Usual pythonic way of parsing command line arguments
-    :return: all command line arguments read
-    '''
     args = argparse.ArgumentParser("subgraph2vec")
     # args.add_argument("--corpus", default = "wlfile/DrebinADGs_5k_malware/",
-    args.add_argument("-c","--corpus", default = "../data/kdd_datasets/ptc",
+    args.add_argument("-c","--corpus", default = "./data/kdd_datasets/ptc",
                       help="Path to directory containing graph files to be used for graph classification or clustering")
 
-    args.add_argument('-l','--class_labels_file_name', default='../data/kdd_datasets/ptc.Labels',
+    args.add_argument('-l','--class_labels_file_name', default='./data/kdd_datasets/ptc.Labels',
                       help='File name containg the name of the sample and the class labels')
 
     # args.add_argument("--output_dir", default = "embeddings/DrebinADGs_5k_malware/",
-    args.add_argument('-o', "--output_dir", default = "../embeddings",
+    args.add_argument('-o', "--output_dir", default = "./embeddings",
                       help="Path to directory for storing output embeddings")
 
     args.add_argument('-b',"--batch_size", default=128, type=int,

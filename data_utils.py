@@ -5,7 +5,6 @@ import logging
 import operator
 from collections import defaultdict
 from random import shuffle
-from pprint import pprint
 from utils import get_files
 
 
@@ -52,7 +51,7 @@ class Corpus(object):
         self.low_freq_word_ids = low_freq_words_ids
 
         word_id_freq_map_as_list = [] #id of this list is the word id and value is the freq of word with corresponding word id
-        for i in xrange(len(self._word_to_freq_map)):
+        for i in range(len(self._word_to_freq_map)):
             word_id_freq_map_as_list.append(self._word_to_freq_map[self._id_to_word_map[i]])
         self.word_id_freq_map_as_list = word_id_freq_map_as_list
 
@@ -70,19 +69,6 @@ class Corpus(object):
 
         self.doc_shuffle = range(len(self.doc_list))
         np.random.shuffle(self.doc_shuffle)
-
-    # def get_reject_prob (self):
-    #     threshold = self.sample * self._wordcount
-    #     n_tokens = self._vocabsize
-    #
-    #     reject_prob = np.zeros((n_tokens,)) #numpy array: index is word id and value is its reject probability
-    #     for i in xrange(n_tokens):
-    #         w = self._id_to_word_map[i]
-    #         freq = 1.0 * self._word_to_freq_map[w]
-    #         reject_prob[i] = max(0, 1 - np.sqrt(threshold / freq)-threshold/freq)
-    #         #rejectProb[i] = 0
-    #   # self._reject_prob = reject_prob
-
 
     def generate_batch_from_file(self, batch_size):
         targetword_ids = []
@@ -109,14 +95,7 @@ class Corpus(object):
 
             contextword_ids.extend([self._word_to_id_map[cword] for cword in context_words])
             targetword_ids.extend([self._word_to_id_map[target_word]] * len(context_words))
-
-            # print doc_name
-            # print contextword_ids
-            # print targetword_ids
-            # print doc[line_id].rstrip().split()[1:]
-            # print doc[line_id].rstrip().split()[0]
-            # raw_input()
-
+            
             self.subgraph_index+=1
             while self.subgraph_index == len(doc):
                 self.subgraph_index = 0

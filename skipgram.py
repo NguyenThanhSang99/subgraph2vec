@@ -1,12 +1,7 @@
 import tensorflow as tf
 import math,logging
-from pprint import  pprint
 
 class skipgram(object):
-    '''
-    skipgram model - refer Mikolov et al (2013)
-    '''
-
     def trainer_initial(self):
         graph = tf.Graph()
         with graph.as_default():
@@ -82,7 +77,7 @@ class skipgram(object):
 
             loss = 0
 
-            for i in xrange(self.num_steps):
+            for i in range(self.num_steps):
 
                 step = 0
                 while corpus.epoch_flag == False:
@@ -103,7 +98,7 @@ class skipgram(object):
                 logging.info('#########################   Epoch: %d :  %f   #####################' % (i, loss/step))
                 loss = 0
                 sim = self.similarity.eval()
-                for j in xrange(len(valid_dataset)):
+                for j in range(len(valid_dataset)):
                     top_k = 10  # Number of nearest neighbours
                     nearest = (-sim[j, :]).argsort()[1:top_k + 1]
                     log_str = '***** Nearest to %s ***** \n' % corpus._id_to_word_map[valid_dataset[j]]

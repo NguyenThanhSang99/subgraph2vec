@@ -33,5 +33,3 @@ def get_class_labels(graph_files, class_labels_fname):
     labels = [graph_to_class_label_map[os.path.basename(g).split('.')[0]] for g in graph_files]
     return labels
 
-if __name__ == '__main__':
-    print 'nothing to do'
